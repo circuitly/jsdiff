@@ -23,6 +23,7 @@
     "email": "kpdecker@gmail.com",
     "url": "http://github.com/kpdecker/jsdiff/issues"
   },
+  "type": "module",
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",

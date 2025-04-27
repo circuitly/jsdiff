@@ -104,6 +104,11 @@ Diff.prototype = {
 
         newPos = self.extractCommon(basePath, newString, oldString, diagonalPath, options);
 
+        if (options.returnPartialResults && Date.now() > abortAfterTimestamp) {
+          options.gotPartialResults = true;
+          return done(buildValues(self, basePath.lastComponent, newString, oldString, self.useLongestToken));
+        }
+
         if (basePath.oldPos + 1 >= oldLen && newPos + 1 >= newLen) {
           // If we have hit the end of both strings, then we are done
           return done(buildValues(self, basePath.lastComponent, newString, oldString, self.useLongestToken)) || true;
@@ -125,10 +130,11 @@ Diff.prototype = {
     // sync and async mode which is never fun. Loops over execEditLength until a value
     // is produced, or until the edit length exceeds options.maxEditLength (if given),
     // in which case it will return undefined.
+    const abortAfterTimestamp2 = options.returnPartialResults ? abortAfterTimestamp + (options?.timeout ?? 0.0) * 1.25 : abortAfterTimestamp;
     if (callback) {
       (function exec() {
         setTimeout(function() {
-          if (editLength > maxEditLength || Date.now() > abortAfterTimestamp) {
+          if (editLength > maxEditLength || Date.now() > abortAfterTimestamp2) {
             return callback();
           }
 
@@ -138,7 +144,7 @@ Diff.prototype = {
         }, 0);
       }());
     } else {
-      while (editLength <= maxEditLength && Date.now() <= abortAfterTimestamp) {
+      while (editLength <= maxEditLength && Date.now() <= abortAfterTimestamp2) {
         let ret = execEditLength();
         if (ret) {
           return ret;

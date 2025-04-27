@@ -27,5 +27,18 @@ describe('root exports', function() {
     expect(Diff.convertChangesToDMP).to.exist;
     expect(Diff.convertChangesToXML).to.exist;
     expect(Diff.canonicalize).to.exist;
+
+    let a = '';
+    let b = '';
+    for (let i = 0; i < 1024 * 1024 * 5; i++) {
+      a += '' + Math.random();
+      b += '' + Math.random();
+      if (i % 5 === 0) {
+        a += '\n';
+        b += '\n';
+      }
+    }
+    const result = Diff.createPatch('', a, b, '', '', {timeout: 50, returnPartialResults: true});
+    expect(result).to.exist;
   });
 });
