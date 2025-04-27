@@ -45,10 +45,23 @@ export function structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHea
       return lines.map(function(entry) { return ' ' + entry; });
     }
 
+
+    const startTime = performance.now();
+    function checkAbort() {
+      if (options?.timeout !== undefined && performance.now() - startTime > options.timeout) {
+        return true;
+      }
+      return false;
+    }
+
     let hunks = [];
     let oldRangeStart = 0, newRangeStart = 0, curRange = [],
         oldLine = 1, newLine = 1;
     for (let i = 0; i < diff.length; i++) {
+      if (checkAbort()) {
+        break;
+      }
+
       const current = diff[i],
             lines = current.lines || splitLines(current.value);
       current.lines = lines;

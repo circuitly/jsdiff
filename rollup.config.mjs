@@ -9,14 +9,14 @@ export default [
       {
         name: 'Diff',
         format: 'umd',
-        file: pkg.browser
+        file: './dist/diff.js',
       },
       {
         format: 'esm',
-        file: pkg.module
+        file: './lib/index.es6.js',
       }, {
         format: 'esm',
-        file: pkg.exports['.']['import']
+        file: './lib/index.mjs'
       }
     ],
     plugins: [

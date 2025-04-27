@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "A javascript text diff implementation.",
   "keywords": [
     "diff",
@@ -37,7 +37,7 @@
   "scripts": {
     "clean": "rm -rf lib/ dist/ coverage/ .nyc_output/",
     "lint": "yarn eslint 'src/**/*.js' 'test/**/*.js'",
-    "build": "yarn lint && yarn run-babel && yarn run-rollup && yarn run-uglify",
+    "build": "bash build.sh",
     "test": "nyc yarn _test",
     "_test": "yarn build && cross-env NODE_ENV=test yarn run-mocha",
     "run-babel": "babel --out-dir lib  --source-maps=inline src",
